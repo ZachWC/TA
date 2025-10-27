@@ -1,3 +1,7 @@
+/**
+ * Exception thrown when a syntax error occurs during parsing.
+ * Contains position information, expected token, and found token.
+ */
 public class SyntaxException extends Exception {
 
 	private int pos;

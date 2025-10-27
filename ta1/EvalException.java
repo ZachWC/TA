@@ -1,3 +1,7 @@
+/**
+ * Exception thrown when an evaluation error occurs.
+ * Contains position information and an error message.
+ */
 public class EvalException extends Exception {
 
 	private int pos;

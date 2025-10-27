@@ -1,8 +1,9 @@
-// This class is a recursive-descent parser,
-// modeled after the programming language's grammar.
-// It constructs and has-a Scanner for the program
-// being parsed.
-
+/**
+ * This class is a recursive-descent parser,
+ * modeled after the programming language's grammar.
+ * It constructs and has-a Scanner for the program
+ * being parsed.
+ */
 public class Parser {
 
 	private Scanner scanner;
@@ -50,6 +51,12 @@ public class Parser {
 			match(")");
 			return new NodeFactExpr(expr);
 		}
+		// Handle unary minus operator
+		if (curr().equals(new Token("-"))) {
+			match("-");
+			NodeFact fact = parseFact();
+			return new NodeFactUnMinus(fact);
+		}
 		if (curr().equals(new Token("id"))) {
 			Token id = curr();
 			match("id");
@@ -96,6 +103,12 @@ public class Parser {
 		return stmt;
 	}
 
+	/**
+	 * Parses a complete source program into an abstract syntax tree.
+	 * @param program The source code to parse
+	 * @return Root node of the parse tree (NodeStmt)
+	 * @throws SyntaxException if a syntax error is encountered
+	 */
 	public Node parse(String program) throws SyntaxException {
 		scanner = new Scanner(program);
 		scanner.next();

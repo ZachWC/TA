@@ -1,38 +1,53 @@
-// This class provides a stubbed-out environment.
-// You are expected to implement the methods.
-// Accessing an undefined variable should throw an exception.
-
-// Hint!
-// Use the Java API to implement your Environment.
-// Browse:
-//   https://docs.oracle.com/javase/tutorial/tutorialLearningPaths.html
-// Read about Collections.
-// Focus on the Map interface and HashMap implementation.
-// Also:
-//   https://www.tutorialspoint.com/java/java_map_interface.htm
-//   http://www.javatpoint.com/java-map
-// and elsewhere.
+/**
+ * This class provides an environment for storing and retrieving variable values.
+ * Accessing an undefined variable throws an exception.
+ * 
+ * This environment uses a HashMap to map variable names to their double values.
+ */
+import java.util.HashMap;
+import java.util.Map;
 
 public class Environment {
 
-	private String[] map = { "x" };
+	private Map<String, Double> variables = new HashMap<String, Double>();
 
-	public int put(String var, int val) {
+	/**
+	 * Stores a variable value in the environment.
+	 * @param var Variable name
+	 * @param val Variable value
+	 * @return The value that was stored
+	 */
+	public double put(String var, double val) {
+		variables.put(var, val);
 		return val;
 	}
 
-	public int get(int pos, String var) throws EvalException {
-		return 0;
+	/**
+	 * Retrieves a variable value from the environment.
+	 * @param pos Position in source for error reporting
+	 * @param var Variable name
+	 * @return The variable's value
+	 * @throws EvalException if the variable is not defined
+	 */
+	public double get(int pos, String var) throws EvalException {
+		if (!variables.containsKey(var)) {
+			throw new EvalException(pos, "undefined variable: " + var);
+		}
+		return variables.get(var);
 	}
 
+	/**
+	 * Generates C code to declare all variables in the environment.
+	 * @return C code declaring all variables as doubles
+	 */
 	public String toC() {
 		String s = "";
 		String sep = " ";
-		for (String v : map) {
+		for (String v : variables.keySet()) {
 			s += sep + v;
 			sep = ",";
 		}
-		return s == "" ? "" : "int" + s + ";\nx=0;x=x;\n";
+		return s == "" ? "" : "double" + s + ";\n";
 	}
 
 }
